@@ -40,13 +40,18 @@ app.get('/', (req, res) => {
 
 app.get('/posts', async (req, res) => {
     try {
-        const posts = await Post.findAll();
+        // Busca todos os posts e inclui os comentários associados
+        const posts = await Post.findAll({
+            include: { model: Comment, as: 'comments' }, // Inclui os comentários
+        });
+
         return res.status(200).json(posts);
     } catch (err) {
-        console.error('Erro ao buscar posts:', err.message);
+        console.error('Erro ao buscar posts com comentários:', err.message);
         return res.status(400).send('Erro ao buscar posts');
     }
 });
+
 
 app.get('/posts/:postId', async (req, res) => {
     try {
