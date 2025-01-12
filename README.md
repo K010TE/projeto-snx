@@ -15,11 +15,6 @@ Siga estas etapas para configurar e rodar o projeto na sua máquina local:
 
 2. **O arquivo `.env` já está configurado no repositório:**
 
-   ```env
-   POSTGRES_URL=postgresql://public_user:public_password@host_do_banco:5432/api_snx
-   PORT=3333
-   ```
-
    As credenciais já estão prontas para uso com um banco público configurado para este projeto. Como não há dados sensíveis e o projeto é apenas para fins de avaliação tecnica, escolhi essa abordagem por ser mais fácil de ser testada e avaliada.
 
 3. **Instale as dependências:**
