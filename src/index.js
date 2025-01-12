@@ -1,6 +1,7 @@
 const express = require('express')
 const { Pool } = require('pg')
 const Post = require('./models/Post');
+const Comment = require('./models/Comment')
 const sequelize = require('./database');
 require('dotenv').config()
 
@@ -31,6 +32,8 @@ sequelize
     });
 
 
+
+
 app.get('/', (req, res) => {
     console.log('Mensagem')
 })
@@ -44,6 +47,28 @@ app.get('/posts', async (req, res) => {
         return res.status(400).send('Erro ao buscar posts');
     }
 });
+
+app.get('/posts/:postId', async (req, res) => {
+    try {
+        const { postId } = req.params;
+
+        // Busca o post pelo ID e inclui os comentários associados
+        const post = await Post.findByPk(postId, {
+            include: { model: Comment, as: 'comments' },
+        });
+
+        if (!post) {
+            return res.status(404).send('Post não encontrado');
+        }
+
+        return res.status(200).json(post);
+    } catch (err) {
+        console.error('Erro ao buscar post com comentários:', err.message);
+        return res.status(400).send('Erro ao buscar post');
+    }
+});
+
+
 
 /*
 
@@ -70,6 +95,28 @@ app.post('/posts', async (req, res) => {
         return res.status(400).send('Erro ao criar post');
     }
 });
+
+app.post('/posts/:postId/comments', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { content } = req.body;
+
+        // Verifica se o post existe
+        const post = await Post.findByPk(postId);
+        if (!post) {
+            return res.status(404).send('Post não encontrado');
+        }
+
+        // Cria o comentário associado ao post
+        const comment = await Comment.create({ content, postId });
+        return res.status(201).json(comment);
+    } catch (err) {
+        console.error('Erro ao adicionar comentário:', err.message);
+        return res.status(400).send('Erro ao adicionar comentário');
+    }
+});
+
+
 
 app.put('/posts/:id', async (req, res) => {
     try {
@@ -104,15 +151,20 @@ app.delete('/posts/:id', async (req, res) => {
 });
 
 
-// Testar a sincronização do modelo com o banco
 (async () => {
     try {
-        await Post.sync(); // Sincroniza o modelo com o banco de dados
-        console.log('Modelo sincronizado com sucesso!');
+        // Sincronizar as tabelas `Post` e `Comment`
+        await Post.sync();
+        await Comment.sync();
+        console.log('Tabelas sincronizadas com sucesso!');
     } catch (err) {
-        console.error('Erro ao sincronizar o modelo:', err.message);
+        console.error('Erro ao sincronizar tabelas:', err.message);
+        process.exit(1); // Finaliza o processo em caso de erro
     }
 })();
+
+
+
 
 
 app.listen(PORT, () => {
