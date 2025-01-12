@@ -3,7 +3,8 @@ const { Pool } = require('pg');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
 const sequelize = require('./database');
-const { verifyToken } = require('./auth'); // Importa o middleware de autenticação
+const { verifyToken, generateToken } = require('./auth'); // Middleware e função de geração de token
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const PORT = 3333;
@@ -18,16 +19,30 @@ const pool = new Pool({
 const app = express();
 app.use(express.json());
 
-// Testa a conexão com o banco de dados
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Conexão com o banco bem-sucedida!');
-    })
-    .catch((err) => {
-        console.error('Erro ao conectar ao banco:', err.message);
-        process.exit(1); // Finaliza o processo caso a conexão falhe
-    });
+// Simula um banco de usuários
+const users = [
+    { id: 1, username: 'admin', password: bcrypt.hashSync('123456', 10) },
+    { id: 2, username: 'user', password: bcrypt.hashSync('senha123', 10) },
+];
+
+// Rota de login para autenticação e geração de token JWT
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    const user = users.find((u) => u.username === username);
+    if (!user) {
+        return res.status(401).send('Usuário ou senha inválidos');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).send('Usuário ou senha inválidos');
+    }
+
+    // Gera o token JWT
+    const token = generateToken({ id: user.id, username: user.username });
+    return res.status(200).json({ token });
+});
 
 // Rota pública para teste
 app.get('/', (req, res) => {
