@@ -1,44 +1,40 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
+const User = require('./User');
 
-// Define o modelo "Post"
-const Post = sequelize.define(
-    'Post',
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        content: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
-        },
+const Post = sequelize.define('Post', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
     },
-    {
-        tableName: 'posts',
-        timestamps: false, // Desativa os campos automáticos createdAt e updatedAt
-    }
-);
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    content: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    userId: { // Faz referência ao campo 'id' na tabela 'users'
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User, // Nome do modelo associado
+            key: 'id', // Campo de referência
+        },
+        onDelete: 'CASCADE',
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+}, {
+    tableName: 'posts',
+    timestamps: true,
+});
 
-// Importa o modelo "Comment" para definir o relacionamento
-const Comment = require('./Comment');
+// Relacionamento
+Post.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-// Relacionamento: Um post tem muitos comentários
-Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' });
-Comment.belongsTo(Post, { foreignKey: 'postId', as: 'post' });
-
-// Exporta o modelo "Post"
 module.exports = Post;

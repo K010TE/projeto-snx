@@ -1,10 +1,11 @@
+// Importações necessárias
 const express = require('express');
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const { generateToken, verifyToken } = require('./auth');
+const User = require('./models/User');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
-const User = require('./models/User'); // Modelo de usuário
 const sequelize = require('./database');
 require('dotenv').config();
 
@@ -13,7 +14,7 @@ const PORT = 3333;
 const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
     ssl: {
-        rejectUnauthorized: false, // Aceita certificados autoassinados (se necessário)
+        rejectUnauthorized: false,
     },
 });
 
@@ -79,104 +80,65 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Rota pública para teste
-app.get('/', (req, res) => {
-    res.send('API funcionando!');
-});
-
-// Rotas protegidas com o middleware verifyToken
+// Rotas protegidas
 app.get('/posts', verifyToken, async (req, res) => {
     try {
-        const posts = await Post.findAll({
-            include: { model: Comment, as: 'comments' },
-        });
+        const posts = await Post.findAll(); // Sem relacionamentos
         res.status(200).json(posts);
     } catch (err) {
+        console.error('Erro ao buscar posts:', err.message);
         res.status(400).send('Erro ao buscar posts');
     }
 });
 
-app.get('/posts/:postId', verifyToken, async (req, res) => {
-    try {
-        const { postId } = req.params;
-        const post = await Post.findByPk(postId, {
-            include: { model: Comment, as: 'comments' },
-        });
-        if (!post) {
-            return res.status(404).send('Post não encontrado');
-        }
-        res.status(200).json(post);
-    } catch (err) {
-        res.status(400).send('Erro ao buscar post');
-    }
-});
 
 app.post('/posts', verifyToken, async (req, res) => {
     try {
         const { title, content } = req.body;
-        const post = await Post.create({ title, content });
+        const userId = req.user.id; // Obtém o userId do token JWT
+        const username = req.user.username; // Obtém o username do token JWT
+
+        const post = await Post.create({ title, content, userId, username });
         res.status(201).json(post);
     } catch (err) {
+        console.error('Erro ao criar post:', err.message);
         res.status(400).send('Erro ao criar post');
     }
 });
+
 
 app.post('/posts/:postId/comments', verifyToken, async (req, res) => {
     try {
         const { postId } = req.params;
         const { content } = req.body;
+        const userId = req.user.id; // Obtém o userId do token JWT
+
         const post = await Post.findByPk(postId);
         if (!post) {
             return res.status(404).send('Post não encontrado');
         }
-        const comment = await Comment.create({ content, postId });
+
+        const comment = await Comment.create({ content, postId, userId });
         res.status(201).json(comment);
     } catch (err) {
         res.status(400).send('Erro ao adicionar comentário');
     }
 });
 
-app.put('/posts/:id', verifyToken, async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { title, content } = req.body;
-        const post = await Post.findByPk(id);
-        if (!post) {
-            return res.status(404).send('Post não encontrado');
-        }
-        await post.update({ title, content });
-        res.status(200).json(post);
-    } catch (err) {
-        res.status(400).send('Erro ao atualizar post');
-    }
-});
-
-app.delete('/posts/:id', verifyToken, async (req, res) => {
-    try {
-        const { id } = req.params;
-        const post = await Post.findByPk(id);
-        if (!post) {
-            return res.status(404).send('Post não encontrado');
-        }
-        await post.destroy();
-        res.status(200).send('Post deletado com sucesso');
-    } catch (err) {
-        res.status(400).send('Erro ao deletar post');
-    }
-});
 
 // Sincronização de tabelas
 (async () => {
     try {
-        await User.sync();
-        await Post.sync();
-        await Comment.sync();
+        await User.sync(); // Sincroniza a tabela 'users' normalmente
+        await Post.sync({ alter: true }); // Força a atualização da tabela 'posts' com base no modelo
+        await Comment.sync(); // Sincroniza a tabela 'comments' normalmente
         console.log('Tabelas sincronizadas com sucesso!');
     } catch (err) {
         console.error('Erro ao sincronizar tabelas:', err.message);
         process.exit(1);
     }
 })();
+
 
 // Inicia o servidor
 app.listen(PORT, () => {
