@@ -1,11 +1,12 @@
-const express = require('express')
-const { Pool } = require('pg')
+const express = require('express');
+const { Pool } = require('pg');
 const Post = require('./models/Post');
-const Comment = require('./models/Comment')
+const Comment = require('./models/Comment');
 const sequelize = require('./database');
-require('dotenv').config()
+const { verifyToken } = require('./auth'); // Importa o middleware de autenticação
+require('dotenv').config();
 
-const PORT = 3333
+const PORT = 3333;
 
 const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
@@ -14,11 +15,8 @@ const pool = new Pool({
     },
 });
 
-
-const app = express()
-
-app.use(express.json())
-
+const app = express();
+app.use(express.json());
 
 // Testa a conexão com o banco de dados
 sequelize
@@ -31,16 +29,14 @@ sequelize
         process.exit(1); // Finaliza o processo caso a conexão falhe
     });
 
-
-
-
+// Rota pública para teste
 app.get('/', (req, res) => {
-    console.log('Mensagem')
-})
+    res.send('API funcionando!');
+});
 
-app.get('/posts', async (req, res) => {
+// Rotas protegidas com o middleware verifyToken
+app.get('/posts', verifyToken, async (req, res) => {
     try {
-        // Busca todos os posts e inclui os comentários associados
         const posts = await Post.findAll({
             include: { model: Comment, as: 'comments' }, // Inclui os comentários
         });
@@ -52,12 +48,10 @@ app.get('/posts', async (req, res) => {
     }
 });
 
-
-app.get('/posts/:postId', async (req, res) => {
+app.get('/posts/:postId', verifyToken, async (req, res) => {
     try {
         const { postId } = req.params;
 
-        // Busca o post pelo ID e inclui os comentários associados
         const post = await Post.findByPk(postId, {
             include: { model: Comment, as: 'comments' },
         });
@@ -73,24 +67,7 @@ app.get('/posts/:postId', async (req, res) => {
     }
 });
 
-
-
-/*
-
-app.get('/test-db', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT 1;');
-        console.log('Conexão bem-sucedida!');
-        return res.status(200).send('Conexão com o banco bem-sucedida!');
-    } catch (error) {
-        console.error('Erro ao conectar ao banco:', error.message);
-        return res.status(500).send('Erro ao conectar ao banco');
-    }
-});
-
-*/
-
-app.post('/posts', async (req, res) => {
+app.post('/posts', verifyToken, async (req, res) => {
     try {
         const { title, content } = req.body;
         const post = await Post.create({ title, content });
@@ -101,18 +78,16 @@ app.post('/posts', async (req, res) => {
     }
 });
 
-app.post('/posts/:postId/comments', async (req, res) => {
+app.post('/posts/:postId/comments', verifyToken, async (req, res) => {
     try {
         const { postId } = req.params;
         const { content } = req.body;
 
-        // Verifica se o post existe
         const post = await Post.findByPk(postId);
         if (!post) {
             return res.status(404).send('Post não encontrado');
         }
 
-        // Cria o comentário associado ao post
         const comment = await Comment.create({ content, postId });
         return res.status(201).json(comment);
     } catch (err) {
@@ -121,9 +96,7 @@ app.post('/posts/:postId/comments', async (req, res) => {
     }
 });
 
-
-
-app.put('/posts/:id', async (req, res) => {
+app.put('/posts/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const { title, content } = req.body;
@@ -139,8 +112,7 @@ app.put('/posts/:id', async (req, res) => {
     }
 });
 
-
-app.delete('/posts/:id', async (req, res) => {
+app.delete('/posts/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const post = await Post.findByPk(id);
@@ -155,10 +127,9 @@ app.delete('/posts/:id', async (req, res) => {
     }
 });
 
-
+// Sincronização de tabelas
 (async () => {
     try {
-        // Sincronizar as tabelas `Post` e `Comment`
         await Post.sync();
         await Comment.sync();
         console.log('Tabelas sincronizadas com sucesso!');
@@ -168,10 +139,7 @@ app.delete('/posts/:id', async (req, res) => {
     }
 })();
 
-
-
-
-
+// Inicia o servidor
 app.listen(PORT, () => {
-    console.log(`Server rodando na porta ${PORT}`)
-})
+    console.log(`Server rodando na porta ${PORT}`);
+});
