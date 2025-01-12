@@ -1,9 +1,9 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database'); // Certifique-se de ajustar o caminho se necessário
+const sequelize = require('../database');
 
-// Definição do modelo "Post"
+// Define o modelo "Post"
 const Post = sequelize.define(
-    'Post', // Nome do modelo
+    'Post',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -28,9 +28,17 @@ const Post = sequelize.define(
         },
     },
     {
-        tableName: 'posts', // Nome da tabela no banco de dados
-        timestamps: false,  // Desativa as colunas automáticas createdAt e updatedAt
+        tableName: 'posts',
+        timestamps: false, // Desativa os campos automáticos createdAt e updatedAt
     }
 );
 
+// Importa o modelo "Comment" para definir o relacionamento
+const Comment = require('./Comment');
+
+// Relacionamento: Um post tem muitos comentários
+Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' });
+Comment.belongsTo(Post, { foreignKey: 'postId', as: 'post' });
+
+// Exporta o modelo "Post"
 module.exports = Post;
