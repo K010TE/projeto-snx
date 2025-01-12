@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
-const User = require('./User');
 
 const Post = sequelize.define('Post', {
     id: {
@@ -16,14 +15,9 @@ const Post = sequelize.define('Post', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    userId: { // Faz referência ao campo 'id' na tabela 'users'
+    userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: User, // Nome do modelo associado
-            key: 'id', // Campo de referência
-        },
-        onDelete: 'CASCADE',
     },
     username: {
         type: DataTypes.STRING,
@@ -33,8 +27,5 @@ const Post = sequelize.define('Post', {
     tableName: 'posts',
     timestamps: true,
 });
-
-// Relacionamento
-Post.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 module.exports = Post;

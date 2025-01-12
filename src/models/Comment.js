@@ -1,7 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
-const User = require('./User'); // Certifique-se de que este caminho está correto
-const Post = require('./Post'); // Certifique-se de que este caminho está correto
 
 const Comment = sequelize.define('Comment', {
     id: {
@@ -13,31 +11,21 @@ const Comment = sequelize.define('Comment', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    postId: { // Relaciona o comentário a um post
+    postId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: Post,
-            key: 'id',
-        },
-        onDelete: 'CASCADE',
     },
-    userId: { // Relaciona o comentário a um usuário
+    userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: User,
-            key: 'id',
-        },
-        onDelete: 'CASCADE',
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
 }, {
     tableName: 'comments',
     timestamps: true,
 });
-
-// Relacionamentos
-Comment.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // Um comentário pertence a um usuário
-Comment.belongsTo(Post, { foreignKey: 'postId', as: 'post' }); // Um comentário pertence a um post
 
 module.exports = Comment;

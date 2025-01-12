@@ -1,24 +1,13 @@
 // Importações necessárias
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { Pool } = require('pg');
 const { generateToken, verifyToken } = require('./auth');
-const User = require('./models/User');
-const Post = require('./models/Post');
-const Comment = require('./models/Comment');
-const sequelize = require('./database');
+const { sequelize, User, Post, Comment } = require('./models'); // Centralizando os modelos no models/index.js
 require('dotenv').config();
 
+const app = express();
 const PORT = 3333;
 
-const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
-    ssl: {
-        rejectUnauthorized: false,
-    },
-});
-
-const app = express();
 app.use(express.json());
 
 // Testa a conexão com o banco de dados
@@ -80,25 +69,35 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Rotas protegidas
+// Rota para buscar todos os posts com comentários
 app.get('/posts', verifyToken, async (req, res) => {
     try {
-        const posts = await Post.findAll(); // Sem relacionamentos
+        const posts = await Post.findAll({
+            include: {
+                model: Comment,
+                as: 'comments',
+            },
+        });
+
         res.status(200).json(posts);
     } catch (err) {
-        console.error('Erro ao buscar posts:', err.message);
+        console.error('Erro ao buscar posts com comentários:', err.message);
         res.status(400).send('Erro ao buscar posts');
     }
 });
 
-
+// Rota para criar um post
 app.post('/posts', verifyToken, async (req, res) => {
     try {
         const { title, content } = req.body;
-        const userId = req.user.id; // Obtém o userId do token JWT
-        const username = req.user.username; // Obtém o username do token JWT
 
-        const post = await Post.create({ title, content, userId, username });
+        const post = await Post.create({
+            title,
+            content,
+            userId: req.user.id, // Obtém o ID do usuário do token JWT
+            username: req.user.username, // Obtém o username do token JWT
+        });
+
         res.status(201).json(post);
     } catch (err) {
         console.error('Erro ao criar post:', err.message);
@@ -106,39 +105,41 @@ app.post('/posts', verifyToken, async (req, res) => {
     }
 });
 
-
+// Rota para adicionar um comentário
 app.post('/posts/:postId/comments', verifyToken, async (req, res) => {
     try {
         const { postId } = req.params;
         const { content } = req.body;
-        const userId = req.user.id; // Obtém o userId do token JWT
 
         const post = await Post.findByPk(postId);
         if (!post) {
             return res.status(404).send('Post não encontrado');
         }
 
-        const comment = await Comment.create({ content, postId, userId });
+        const comment = await Comment.create({
+            content,
+            postId,
+            userId: req.user.id, // Obtém o ID do usuário do token JWT
+            username: req.user.username, // Obtém o username do token JWT
+        });
+
         res.status(201).json(comment);
     } catch (err) {
+        console.error('Erro ao adicionar comentário:', err.message);
         res.status(400).send('Erro ao adicionar comentário');
     }
 });
 
-
 // Sincronização de tabelas
 (async () => {
     try {
-        await User.sync(); // Sincroniza a tabela 'users' normalmente
-        await Post.sync({ alter: true }); // Força a atualização da tabela 'posts' com base no modelo
-        await Comment.sync(); // Sincroniza a tabela 'comments' normalmente
+        await sequelize.sync({ alter: true }); // Sincroniza as tabelas sem perder dados
         console.log('Tabelas sincronizadas com sucesso!');
     } catch (err) {
         console.error('Erro ao sincronizar tabelas:', err.message);
         process.exit(1);
     }
 })();
-
 
 // Inicia o servidor
 app.listen(PORT, () => {
