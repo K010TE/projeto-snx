@@ -1,9 +1,11 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
+const { generateToken, verifyToken } = require('./auth');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
+const User = require('./models/User'); // Modelo de usuário
 const sequelize = require('./database');
-const { verifyToken, generateToken } = require('./auth');
 require('dotenv').config();
 
 const PORT = 3333;
@@ -18,23 +20,63 @@ const pool = new Pool({
 const app = express();
 app.use(express.json());
 
-// Simula um banco de usuários para autenticação
-const users = [
-    { id: 1, username: 'admin', password: '123456' }, // Em produção, use senhas criptografadas
-];
+// Testa a conexão com o banco de dados
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Conexão com o banco bem-sucedida!');
+    })
+    .catch((err) => {
+        console.error('Erro ao conectar ao banco:', err.message);
+        process.exit(1);
+    });
 
-// Rota de login para autenticação
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+// Endpoint de registro de usuários
+app.post('/register', async (req, res) => {
+    try {
+        const { name, username, password } = req.body;
 
-    const user = users.find((u) => u.username === username);
-    if (!user || user.password !== password) {
-        return res.status(401).send('Usuário ou senha inválidos');
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(400).send('Username já está em uso.');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await User.create({
+            name,
+            username,
+            password: hashedPassword,
+        });
+
+        res.status(201).json({ id: newUser.id, name: newUser.name, username: newUser.username });
+    } catch (err) {
+        console.error('Erro ao registrar usuário:', err.message);
+        res.status(500).send('Erro ao registrar usuário.');
     }
+});
 
-    // Gera o token JWT
-    const token = generateToken({ id: user.id, username: user.username });
-    res.status(200).json({ token });
+// Endpoint de login de usuários
+app.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const user = await User.findOne({ where: { username } });
+        if (!user) {
+            return res.status(401).send('Usuário ou senha inválidos.');
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).send('Usuário ou senha inválidos.');
+        }
+
+        const token = generateToken({ id: user.id, username: user.username });
+        res.status(200).json({ token });
+    } catch (err) {
+        console.error('Erro ao fazer login:', err.message);
+        res.status(500).send('Erro ao fazer login.');
+    }
 });
 
 // Rota pública para teste
@@ -126,6 +168,7 @@ app.delete('/posts/:id', verifyToken, async (req, res) => {
 // Sincronização de tabelas
 (async () => {
     try {
+        await User.sync();
         await Post.sync();
         await Comment.sync();
         console.log('Tabelas sincronizadas com sucesso!');
@@ -137,5 +180,5 @@ app.delete('/posts/:id', verifyToken, async (req, res) => {
 
 // Inicia o servidor
 app.listen(PORT, () => {
-    console.log(`Server rodando na porta ${PORT}`);
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
