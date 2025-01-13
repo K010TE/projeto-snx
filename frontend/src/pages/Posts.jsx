@@ -6,7 +6,11 @@ const Posts = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [commentContent, setCommentContent] = useState({});
-    const userId = localStorage.getItem('userId'); // Obtém o userId do localStorage
+    const [editPostId, setEditPostId] = useState(null);
+    const [editComment, setEditComment] = useState({});
+    const [editTitle, setEditTitle] = useState('');
+    const [editContent, setEditContent] = useState('');
+    const userId = localStorage.getItem('userId');
 
     const fetchPosts = async () => {
         try {
@@ -38,7 +42,7 @@ const Posts = () => {
             alert('Post criado com sucesso!');
         } catch (err) {
             console.error('Erro ao criar post:', err);
-            alert('Erro ao criar post. Verifique as informações.');
+            alert('Erro ao criar post.');
         }
     };
 
@@ -56,31 +60,29 @@ const Posts = () => {
         }
     };
 
-    const handleCreateComment = async (e, postId) => {
+    const handleEditPost = async (e, postId) => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const content = commentContent[postId] || '';
-            const response = await axios.post(
-                `/api/posts/${postId}/comments`,
-                { content },
+            await axios.put(
+                `/api/posts/${postId}`,
+                { title: editTitle, content: editContent },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-
             setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                     post.id === postId
-                        ? { ...post, comments: [...post.comments, response.data] }
+                        ? { ...post, title: editTitle, content: editContent }
                         : post
                 )
             );
-            setCommentContent((prevState) => ({ ...prevState, [postId]: '' }));
-            alert('Comentário adicionado com sucesso!');
+            setEditPostId(null);
+            alert('Post editado com sucesso!');
         } catch (err) {
-            console.error('Erro ao adicionar comentário:', err);
-            alert('Erro ao adicionar comentário.');
+            console.error('Erro ao editar post:', err);
+            alert('Erro ao editar post.');
         }
     };
 
@@ -90,7 +92,6 @@ const Posts = () => {
             await axios.delete(`/api/posts/${postId}/comments/${commentId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
             setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                     post.id === postId
@@ -108,6 +109,40 @@ const Posts = () => {
         }
     };
 
+    const handleEditComment = async (e, postId, commentId) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const updatedContent = commentContent[commentId];
+            await axios.put(
+                `/api/posts/${postId}/comments/${commentId}`,
+                { content: updatedContent },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post.id === postId
+                        ? {
+                              ...post,
+                              comments: post.comments.map((comment) =>
+                                  comment.id === commentId
+                                      ? { ...comment, content: updatedContent }
+                                      : comment
+                              ),
+                          }
+                        : post
+                )
+            );
+            setEditComment((prevState) => ({ ...prevState, [commentId]: false }));
+            alert('Comentário editado com sucesso!');
+        } catch (err) {
+            console.error('Erro ao editar comentário:', err);
+            alert('Erro ao editar comentário.');
+        }
+    };
+
     const handleCommentChange = (postId, value) => {
         setCommentContent((prevState) => ({ ...prevState, [postId]: value }));
     };
@@ -120,7 +155,6 @@ const Posts = () => {
         <div className="posts-container">
             <h1 className="posts-header">Posts</h1>
 
-            {/* Formulário para criar posts */}
             <form className="post-form" onSubmit={handleCreatePost}>
                 <input
                     className="form-input"
@@ -153,29 +187,111 @@ const Posts = () => {
                             <strong>Autor:</strong> {post.username}
                         </p>
                         {post.userId === Number(userId) && (
-                            <button
-                                onClick={() => handleDeletePost(post.id)}
-                                className="btn btn-danger btn-post-delete"
+                            <div className="post-actions">
+                                <button
+                                    onClick={() => {
+                                        setEditPostId(post.id);
+                                        setEditTitle(post.title);
+                                        setEditContent(post.content);
+                                    }}
+                                    className="btn btn-edit"
+                                >
+                                    Editar
+                                </button>
+                                <button
+                                    onClick={() => handleDeletePost(post.id)}
+                                    className="btn btn-danger"
+                                >
+                                    Deletar
+                                </button>
+                            </div>
+                        )}
+                        {editPostId === post.id && (
+                            <form
+                                onSubmit={(e) => handleEditPost(e, post.id)}
+                                className="edit-post-form"
                             >
-                                Deletar Post
-                            </button>
+                                <input
+                                    type="text"
+                                    placeholder="Novo título"
+                                    value={editTitle}
+                                    onChange={(e) => setEditTitle(e.target.value)}
+                                    required
+                                />
+                                <textarea
+                                    placeholder="Novo conteúdo"
+                                    value={editContent}
+                                    onChange={(e) => setEditContent(e.target.value)}
+                                    required
+                                ></textarea>
+                                <button type="submit" className="btn btn-primary">
+                                    Salvar
+                                </button>
+                            </form>
                         )}
                         <h3 className="comments-header">Comentários:</h3>
                         {post.comments && post.comments.length > 0 ? (
                             <ul className="comments-list">
                                 {post.comments.map((comment) => (
                                     <li key={comment.id} className="comment-item">
-                                        <p className="comment-content">{comment.content}</p>
-                                        <p className="comment-author">
-                                            <strong>Comentado por:</strong> {comment.username}
-                                        </p>
-                                        {comment.userId === Number(userId) && (
-                                            <button
-                                                onClick={() => handleDeleteComment(post.id, comment.id)}
-                                                className="btn btn-danger btn-comment-delete"
+                                        {editComment[comment.id] ? (
+                                            <form
+                                                onSubmit={(e) =>
+                                                    handleEditComment(e, post.id, comment.id)
+                                                }
                                             >
-                                                Excluir Comentário
-                                            </button>
+                                                <input
+                                                    className="form-input"
+                                                    type="text"
+                                                    defaultValue={comment.content}
+                                                    onChange={(e) =>
+                                                        setCommentContent((prevState) => ({
+                                                            ...prevState,
+                                                            [comment.id]: e.target.value,
+                                                        }))
+                                                    }
+                                                    required
+                                                />
+                                                <button className="btn btn-primary" type="submit">
+                                                    Salvar
+                                                </button>
+                                            </form>
+                                        ) : (
+                                            <>
+                                                <p className="comment-content">
+                                                    {comment.content}
+                                                </p>
+                                                <p className="comment-author">
+                                                    <strong>Comentado por:</strong>{' '}
+                                                    {comment.username}
+                                                </p>
+                                                {comment.userId === Number(userId) && (
+                                                    <div className="comment-actions">
+                                                        <button
+                                                            onClick={() =>
+                                                                setEditComment((prevState) => ({
+                                                                    ...prevState,
+                                                                    [comment.id]: true,
+                                                                }))
+                                                            }
+                                                            className="btn btn-edit"
+                                                        >
+                                                            Editar
+                                                        </button>
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDeleteComment(
+                                                                    post.id,
+                                                                    comment.id
+                                                                )
+                                                            }
+                                                            className="btn btn-danger"
+                                                        >
+                                                            Excluir
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
                                     </li>
                                 ))}
