@@ -12,7 +12,7 @@ const Navbar = () => {
         localStorage.removeItem('userId');
         localStorage.removeItem('username');
         
-        alert('Você foi desconectado!');
+        //alert('Você saiu!');
         // Redireciona para a tela de login
         navigate('/');
     };
