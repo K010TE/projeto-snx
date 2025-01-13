@@ -8,15 +8,17 @@ import './App.css';
 const App = () => {
     return (
         <Router>
-            {/* Navbar estará no topo da página */}
-            <Navbar />
-            <div className="app-container">
-                {/* Rotas para as páginas */}
-                <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/posts" element={<Posts />} />
-                </Routes>
+            <div className="app-layout">
+                {/* Navbar fixa na lateral */}
+                <Navbar />
+                {/* Conteúdo principal ajustado */}
+                <div className="app-content">
+                    <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/posts" element={<Posts />} />
+                    </Routes>
+                </div>
             </div>
         </Router>
     );

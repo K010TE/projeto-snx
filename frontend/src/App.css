@@ -1,3 +1,15 @@
+/* Layout geral da aplicação */
+.app-layout {
+  display: flex;
+}
+
+/* Conteúdo principal com margem para não sobrepor a Navbar */
+.app-content {
+  margin-left: 200px; /* Deve corresponder à largura da Navbar */
+  padding: 20px;
+  flex: 1;
+}
+
 /* Variáveis de Estilo */
 body {
   display: flex;
@@ -26,13 +38,23 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Navbar fixa na lateral esquerda */
 .navbar {
-  position: absolute;
-  top: 10px; /* Distância do topo */
-  left: 10px; /* Distância da esquerda */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px; /* Largura da Navbar */
+  height: 100%; /* Ocupa toda a altura da página */
+  background-color: #333; /* Cor de fundo */
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Sombras para destaque */
+  z-index: 1000; /* Garante que a Navbar fique acima do conteúdo */
   display: flex;
-  gap: 20px; /* Espaçamento horizontal entre os links */
+  flex-direction: column;
+  justify-content: flex-start;
 }
+
 
 .navbar a {
   text-decoration: none;

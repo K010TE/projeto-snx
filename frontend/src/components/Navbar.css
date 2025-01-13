@@ -1,13 +1,22 @@
 .navbar {
-    width: 200px;
-    height: 100vh;
-    background-color: #2c2c2c;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px; /* Ajuste o tamanho da barra conforme necessário */
+    height: 100%; /* Faz com que ocupe toda a altura da página */
+    background-color: #333; /* Cor de fundo */
+    color: white;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Para alinhar os itens ao topo */
+    justify-content: flex-start;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Sombras para destacar */
+    z-index: 1000; /* Garante que a barra fique acima de outros elementos */
+}
+
+.main-content {
+    margin-left: 200px; /* Deve corresponder à largura da navbar */
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    position: fixed; /* Fixa a barra de navegação na lateral */
 }
 
 .navbar-links {
