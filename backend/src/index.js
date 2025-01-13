@@ -186,6 +186,33 @@ app.delete('/posts/:postId/comments/:commentId', verifyToken, async (req, res) =
     }
 });
 
+app.put('/posts/:id', verifyToken, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, content } = req.body;
+
+        const post = await Post.findByPk(id);
+
+        if (!post) {
+            return res.status(404).send('Post não encontrado.');
+        }
+
+        // Verifica se o usuário que está tentando editar é o autor do post
+        if (post.userId !== req.user.id) {
+            return res.status(403).send('Você não tem permissão para editar este post.');
+        }
+
+        // Atualiza o post
+        await post.update({ title, content });
+
+        res.status(200).json(post); // Retorna o post atualizado
+    } catch (err) {
+        console.error('Erro ao atualizar post:', err.message);
+        res.status(500).send('Erro ao atualizar post.');
+    }
+});
+
+
 
 
 // Sincronização de tabelas

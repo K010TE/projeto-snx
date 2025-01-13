@@ -60,16 +60,20 @@ const Posts = () => {
     };
 
     const handleEditPost = async (e, postId) => {
-        e.preventDefault();
+        e.preventDefault(); // Evita o comportamento padrão do formulário
         try {
             const token = localStorage.getItem('token');
+    
+            // Envia a solicitação de atualização para o backend
             const response = await axios.put(
-                `/api/posts/${postId}`,
-                { title: editTitle, content: editContent },
+                `/api/posts/${postId}`, // Endpoint do backend
+                { title: editTitle, content: editContent }, // Dados a serem enviados
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${token}` }, // Cabeçalho com o token
                 }
             );
+    
+            // Atualiza o estado dos posts com o post editado
             setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                     post.id === postId
@@ -77,13 +81,19 @@ const Posts = () => {
                         : post
                 )
             );
+    
+            // Reseta os estados de edição
             setEditPostId(null);
+            setEditTitle('');
+            setEditContent('');
             alert('Post editado com sucesso!');
         } catch (err) {
             console.error('Erro ao editar post:', err);
-            alert('Erro ao editar post.');
+            alert('Erro ao editar post. Verifique os dados e tente novamente.');
         }
     };
+    
+    
 
     const handleCreateComment = async (e, postId) => {
         e.preventDefault(); // Impede o comportamento padrão do formulário
