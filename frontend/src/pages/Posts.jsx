@@ -174,7 +174,7 @@ const Posts = () => {
                                                 onClick={() => handleDeleteComment(post.id, comment.id)}
                                                 className="btn btn-danger btn-comment-delete"
                                             >
-                                                Excluir
+                                                Excluir Comentário
                                             </button>
                                         )}
                                     </li>

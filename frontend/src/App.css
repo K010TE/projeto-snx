@@ -148,22 +148,26 @@ body {
 
 /* Botão de Deletar Comentário */
 .btn-comment-delete {
-  width: 50%; /* Reduz o tamanho do botão */
-  margin: 10px auto; /* Centraliza o botão */
-  display: block;
-  padding: 5px 0; /* Altura menor */
-  font-size: 0.9rem; /* Texto menor */
-  background-color: var(--color-danger);
-  color: var(--color-text);
-  border: none;
-  border-radius: 5px;
+  width: auto; /* O botão se ajusta ao tamanho do texto */
+  margin: 5px auto; /* Centraliza o botão */
+  display: block; /* Garante que fique sozinho na linha */
+  padding: 2px 5px; /* Reduz o preenchimento interno */
+  font-size: 0.6rem; /* Texto menor */
+  background-color: transparent; /* Fundo transparente */
+  color: #ff4d4d; /* Texto vermelho discreto */
+  border: 1px solid #ff4d4d; /* Borda fina */
+  border-radius: 3px; /* Bordas levemente arredondadas */
   cursor: pointer;
   text-align: center;
+  transition: all 0.2s ease-in-out; /* Suaviza transições no hover */
 }
 
 .btn-comment-delete:hover {
-  background-color: #e63939;
+  background-color: #ff4d4d; /* Fundo levemente destacado no hover */
+  color: #ffffff; /* Texto branco no hover */
 }
+
+
 
 /* Botões Gerais */
 .btn {
