@@ -18,7 +18,7 @@ const Login = () => {
             localStorage.setItem('userId', response.data.userId);
             localStorage.setItem('username', username); // Armazena o username aqui
 
-            alert('Login realizado com sucesso!');
+            //alert('Login realizado com sucesso!');
             navigate('/posts'); // Navega para a página de posts após login
         } catch (err) {
             console.error('Erro no login:', err);
