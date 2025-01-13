@@ -38,7 +38,7 @@ const Posts = () => {
             setPosts([response.data, ...posts]);
             setTitle('');
             setContent('');
-            alert('Post criado com sucesso!');
+            //alert('Post criado com sucesso!');
         } catch (err) {
             console.error('Erro ao criar post:', err);
             alert('Erro ao criar post.');
@@ -82,7 +82,7 @@ const Posts = () => {
             setEditPostId(null);
             setEditTitle('');
             setEditContent('');
-            alert('Post editado com sucesso!');
+            //alert('Post editado com sucesso!');
         } catch (err) {
             console.error('Erro ao editar post:', err);
             alert('Erro ao editar post.');
@@ -111,7 +111,7 @@ const Posts = () => {
             );
 
             setCommentContent((prevState) => ({ ...prevState, [postId]: '' }));
-            alert('Comentário adicionado com sucesso!');
+            //alert('Comentário adicionado com sucesso!');
         } catch (err) {
             console.error('Erro ao adicionar comentário:', err);
             alert('Erro ao adicionar comentário.');
