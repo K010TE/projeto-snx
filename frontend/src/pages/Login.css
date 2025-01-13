@@ -2,73 +2,76 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Mantém o card centralizado verticalmente */
-    color: white; /* Texto claro */
+    height: 100vh; /* Altura da tela toda */
 }
 
 .login-card {
-    background-color: #1f1f1f; /* Fundo do card */
-    padding: 20px;
+    background-color: #1e1e1e; /* Fundo do card */
+    padding: 40px;
     border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     width: 300px;
     text-align: center;
 }
 
-.login-title {
-    font-size: 1.8rem;
+.login-card h1 {
+    font-size: 24px;
+    color: white;
     margin-bottom: 20px;
-    color: #ffffff;
 }
 
-.login-form {
+.login-card form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center; /* Garante que os campos fiquem centralizados */
 }
 
-.form-input {
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #2c2c2c;
+.login-card input {
+    background-color: #2e2e2e;
     color: white;
-}
-
-.form-input::placeholder {
-    color: #aaa;
-}
-
-.btn {
-    padding: 10px;
-    font-size: 1rem;
-    border: none;
+    border: 1px solid #444;
     border-radius: 5px;
-    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    width: 100%; /* Ocupa toda a largura disponível */
+    max-width: 250px; /* Garante consistência no tamanho */
+    text-align: center; /* Centraliza o texto dentro dos inputs */
 }
 
-.btn-primary {
+.login-card input::placeholder {
+    color: #bbb;
+}
+
+.login-card button {
     background-color: #007bff;
     color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100%; /* Alinha o botão com os inputs */
+    max-width: 250px; /* Garante consistência no tamanho */
 }
 
-.btn-primary:hover {
+.login-card button:hover {
     background-color: #0056b3;
 }
 
-.register-link {
+.login-card .register-redirect {
     margin-top: 15px;
-    font-size: 0.9rem;
-    color: #aaa;
+    font-size: 14px;
+    color: white;
 }
 
-.register-link a {
+.login-card .register-redirect a {
     color: #007bff;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.register-link a:hover {
-    text-decoration: underline;
+.login-card .register-redirect a:hover {
+    color: #0056b3;
 }
