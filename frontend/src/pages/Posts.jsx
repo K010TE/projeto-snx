@@ -6,7 +6,7 @@ const Posts = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [commentContent, setCommentContent] = useState({});
-    const userId = localStorage.getItem('userId'); // Obter o userId do usuário logado
+    const userId = localStorage.getItem('userId'); // Obtém o userId do localStorage
 
     const fetchPosts = async () => {
         try {
@@ -84,6 +84,31 @@ const Posts = () => {
         }
     };
 
+    const handleDeleteComment = async (postId, commentId) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`/api/posts/${postId}/comments/${commentId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            // Remove o comentário da lista
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post.id === postId
+                        ? {
+                              ...post,
+                              comments: post.comments.filter((comment) => comment.id !== commentId),
+                          }
+                        : post
+                )
+            );
+            alert('Comentário deletado com sucesso!');
+        } catch (err) {
+            console.error('Erro ao deletar comentário:', err);
+            alert('Erro ao deletar comentário.');
+        }
+    };
+
     const handleCommentChange = (postId, value) => {
         setCommentContent((prevState) => ({ ...prevState, [postId]: value }));
     };
@@ -133,6 +158,22 @@ const Posts = () => {
                                         <p>
                                             <strong>Comentado por:</strong> {comment.username}
                                         </p>
+                                        {/* Botão discreto para deletar comentário */}
+                                        {comment.userId === Number(userId) && (
+                                            <button
+                                                onClick={() => handleDeleteComment(post.id, comment.id)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    color: 'red',
+                                                    cursor: 'pointer',
+                                                    fontSize: '12px',
+                                                    marginLeft: '10px',
+                                                }}
+                                            >
+                                                [Excluir Comentário]
+                                            </button>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

@@ -161,6 +161,32 @@ app.delete('/posts/:id', verifyToken, async (req, res) => {
     }
 });
 
+app.delete('/posts/:postId/comments/:commentId', verifyToken, async (req, res) => {
+    try {
+        const { commentId } = req.params;
+        const userId = req.user.id; // Obtém o ID do usuário logado do token
+
+        // Busca o comentário pelo ID
+        const comment = await Comment.findByPk(commentId);
+        if (!comment) {
+            return res.status(404).send('Comentário não encontrado');
+        }
+
+        // Verifica se o usuário logado é o autor do comentário
+        if (comment.userId !== userId) {
+            return res.status(403).send('Você não tem permissão para deletar este comentário');
+        }
+
+        // Deleta o comentário
+        await comment.destroy();
+        res.status(200).send('Comentário deletado com sucesso');
+    } catch (err) {
+        console.error('Erro ao deletar comentário:', err.message);
+        res.status(500).send('Erro ao deletar comentário');
+    }
+});
+
+
 
 // Sincronização de tabelas
 (async () => {
