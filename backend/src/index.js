@@ -136,6 +136,32 @@ app.post('/posts/:postId/comments', verifyToken, async (req, res) => {
     }
 });
 
+app.delete('/posts/:id', verifyToken, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id; // Obtém o ID do usuário logado a partir do token
+
+        // Busca o post pelo ID
+        const post = await Post.findByPk(id);
+        if (!post) {
+            return res.status(404).send('Post não encontrado');
+        }
+
+        // Verifica se o usuário logado é o autor do post
+        if (post.userId !== userId) {
+            return res.status(403).send('Você não tem permissão para deletar este post');
+        }
+
+        // Deleta o post
+        await post.destroy();
+        return res.status(200).send('Post deletado com sucesso');
+    } catch (err) {
+        console.error('Erro ao deletar post:', err.message);
+        return res.status(500).send('Erro ao deletar post');
+    }
+});
+
+
 // Sincronização de tabelas
 (async () => {
     try {
