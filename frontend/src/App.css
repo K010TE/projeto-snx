@@ -201,6 +201,30 @@ body {
   margin-top: 5px;
 }
 
+/* Centralizar os botões no card */
+.post-actions {
+  display: flex;
+  justify-content: center; /* Centraliza os botões horizontalmente */
+  gap: 10px; /* Espaçamento entre os botões */
+  margin-top: 10px; /* Espaçamento acima dos botões */
+}
+
+/* Efeito de destaque nos botões ao passar o mouse */
+.btn:hover {
+  background-color: #007bff; /* Cor de fundo ao passar o mouse */
+  color: white; /* Cor do texto ao passar o mouse */
+  transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+  transition: all 0.3s ease; /* Transição suave */
+}
+
+/* Botão de deletar com destaque especial */
+.btn-danger:hover {
+  background-color: #ff4d4d; /* Vermelho mais claro para deletar */
+  color: white;
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
 /* Botão de Deletar Comentário */
 .btn-comment-delete {
   width: auto; /* O botão se ajusta ao tamanho do texto */
