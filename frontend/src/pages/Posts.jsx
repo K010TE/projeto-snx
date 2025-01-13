@@ -60,20 +60,17 @@ const Posts = () => {
     };
 
     const handleEditPost = async (e, postId) => {
-        e.preventDefault(); // Evita o comportamento padrão do formulário
+        e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-    
-            // Envia a solicitação de atualização para o backend
             const response = await axios.put(
-                `/api/posts/${postId}`, // Endpoint do backend
-                { title: editTitle, content: editContent }, // Dados a serem enviados
+                `/api/posts/${postId}`,
+                { title: editTitle, content: editContent },
                 {
-                    headers: { Authorization: `Bearer ${token}` }, // Cabeçalho com o token
+                    headers: { Authorization: `Bearer ${token}` },
                 }
             );
-    
-            // Atualiza o estado dos posts com o post editado
+
             setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                     post.id === postId
@@ -81,22 +78,19 @@ const Posts = () => {
                         : post
                 )
             );
-    
-            // Reseta os estados de edição
+
             setEditPostId(null);
             setEditTitle('');
             setEditContent('');
             alert('Post editado com sucesso!');
         } catch (err) {
             console.error('Erro ao editar post:', err);
-            alert('Erro ao editar post. Verifique os dados e tente novamente.');
+            alert('Erro ao editar post.');
         }
     };
-    
-    
 
     const handleCreateComment = async (e, postId) => {
-        e.preventDefault(); // Impede o comportamento padrão do formulário
+        e.preventDefault();
         try {
             const token = localStorage.getItem('token');
             const content = commentContent[postId] || '';
@@ -107,8 +101,7 @@ const Posts = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-    
-            // Atualiza o estado com o novo comentário
+
             setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                     post.id === postId
@@ -116,17 +109,14 @@ const Posts = () => {
                         : post
                 )
             );
-    
-            // Limpa o campo de comentário
+
             setCommentContent((prevState) => ({ ...prevState, [postId]: '' }));
-    
             alert('Comentário adicionado com sucesso!');
         } catch (err) {
             console.error('Erro ao adicionar comentário:', err);
             alert('Erro ao adicionar comentário.');
         }
     };
-    
 
     const handleDeleteComment = async (postId, commentId) => {
         try {
@@ -215,42 +205,57 @@ const Posts = () => {
                             </div>
                         )}
                         {editPostId === post.id && (
-    <form
-        onSubmit={(e) => handleEditPost(e, post.id)}
-        className="edit-post-form"
-    >
-        <input
-            type="text"
-            placeholder="Novo título"
-            value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            required
-        />
-        <textarea
-            placeholder="Novo conteúdo"
-            value={editContent}
-            onChange={(e) => setEditContent(e.target.value)}
-            required
-        ></textarea>
-        <div className="edit-actions">
-            <button type="submit" className="btn btn-primary">
-                Salvar
-            </button>
-            <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => {
-                    setEditPostId(null); // Fecha o modo de edição
-                    setEditTitle(''); // Limpa os estados
-                    setEditContent('');
-                }}
-            >
-                Cancelar
-            </button>
-        </div>
-    </form>
-)}
-
+                            <form
+                                onSubmit={(e) => handleEditPost(e, post.id)}
+                                className="edit-post-form"
+                            >
+                                <input
+                                    type="text"
+                                    placeholder="Novo título"
+                                    value={editTitle}
+                                    onChange={(e) => setEditTitle(e.target.value)}
+                                    required
+                                />
+                                <textarea
+                                    placeholder="Novo conteúdo"
+                                    value={editContent}
+                                    onChange={(e) => setEditContent(e.target.value)}
+                                    required
+                                ></textarea>
+                                <div className="edit-actions">
+                                    <button type="submit" className="btn btn-primary">
+                                        Salvar
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={() => {
+                                            setEditPostId(null);
+                                            setEditTitle('');
+                                            setEditContent('');
+                                        }}
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+                        <form
+                            onSubmit={(e) => handleCreateComment(e, post.id)}
+                            className="comment-form"
+                        >
+                            <input
+                                className="form-input"
+                                type="text"
+                                placeholder="Adicione um comentário..."
+                                value={commentContent[post.id] || ''}
+                                onChange={(e) => handleCommentChange(post.id, e.target.value)}
+                                required
+                            />
+                            <button className="btn btn-primary" type="submit">
+                                Comentar
+                            </button>
+                        </form>
                         <h3 className="comments-header">Comentários:</h3>
                         {post.comments && post.comments.length > 0 ? (
                             <ul className="comments-list">
@@ -276,22 +281,6 @@ const Posts = () => {
                         ) : (
                             <p>Sem comentários</p>
                         )}
-                        <form
-                            onSubmit={(e) => handleCreateComment(e, post.id)}
-                            className="comment-form"
-                        >
-                            <input
-                                className="form-input"
-                                type="text"
-                                placeholder="Adicione um comentário..."
-                                value={commentContent[post.id] || ''}
-                                onChange={(e) => handleCommentChange(post.id, e.target.value)}
-                                required
-                            />
-                            <button className="btn btn-primary" type="submit">
-                                Comentar
-                            </button>
-                        </form>
                     </div>
                 ))
             )}
