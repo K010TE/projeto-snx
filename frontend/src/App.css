@@ -100,6 +100,16 @@ body {
   align-items: center;
 }
 
+/* Ajustar largura do botão "Criar Post" */
+.post-form .btn {
+  width: 100%; /* Ocupa a mesma largura dos campos de entrada */
+  margin-top: 10px; /* Espaçamento acima do botão */
+  padding: 10px; /* Espaçamento interno para melhor aparência */
+  font-size: 16px; /* Tamanho do texto ajustado */
+  text-align: center; /* Centraliza o texto do botão */
+}
+
+
 .form-input {
   width: 100%;
   max-width: 600px;
@@ -174,18 +184,53 @@ body {
   color: var(--color-primary);
 }
 
+/* Ajustar largura do botão "Comentar" */
+.comment-form .btn {
+  width: 100%; /* Ocupa a mesma largura do campo de entrada */
+  margin-top: 5px; /* Espaçamento acima do botão */
+  padding: 8px; /* Espaçamento interno para melhor aparência */
+  font-size: 14px; /* Tamanho do texto ajustado */
+  text-align: center; /* Centraliza o texto do botão */
+}
+
+/* Centralizar o botão "Excluir comentário" no card */
+.comment-actions {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  margin-top: 5px; /* Espaçamento superior para separação do conteúdo */
+}
+
+/* Estilo para o botão "Excluir comentário" */
+.comment-actions .btn {
+  margin: 0 5px; /* Espaçamento entre botões caso existam outros */
+  padding: 8px 12px; /* Ajusta o tamanho do botão */
+  font-size: 14px; /* Tamanho do texto do botão */
+  cursor: pointer; /* Altera o cursor para indicar interatividade */
+  transition: background-color 0.3s ease; /* Suaviza a mudança de cor */
+}
+
+/* Destaque ao passar o mouse */
+.comment-actions .btn:hover {
+  background-color: #d9534f; /* Cor de fundo ao passar o mouse */
+  color: white; /* Cor do texto */
+}
+
 .comments-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+/* Estilização geral do item de comentário */
 .comment-item {
-  background-color: #333333;
-  border-radius: 5px;
+  display: flex; /* Permite centralização e alinhamento */
+  flex-direction: column; /* Mantém os elementos em uma coluna */
+  align-items: center; /* Centraliza horizontalmente */
   padding: 10px;
+  border: 1px solid #ddd; /* Bordas para o card */
+  border-radius: 8px;
   margin-bottom: 10px;
-  position: relative;
+  background-color: #3333;
 }
 
 /* Conteúdo do Comentário */
