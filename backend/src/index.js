@@ -67,7 +67,7 @@ app.post('/login', async (req, res) => {
         const token = generateToken({ id: user.id, username: user.username });
 
         // Retorna o token e o userId
-        res.status(200).json({ token, userId: user.id });
+        res.status(200).json({ token, userId: user.id, username: user.username });
     } catch (err) {
         console.error('Erro ao fazer login:', err.message);
         res.status(500).send('Erro ao fazer login.');
