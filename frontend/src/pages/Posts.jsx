@@ -152,6 +152,14 @@ const Posts = () => {
                         <p className="post-author">
                             <strong>Autor:</strong> {post.username}
                         </p>
+                        {post.userId === Number(userId) && (
+                            <button
+                                onClick={() => handleDeletePost(post.id)}
+                                className="btn btn-danger btn-post-delete"
+                            >
+                                Deletar Post
+                            </button>
+                        )}
                         <h3 className="comments-header">Comentários:</h3>
                         {post.comments && post.comments.length > 0 ? (
                             <ul className="comments-list">
@@ -166,7 +174,7 @@ const Posts = () => {
                                                 onClick={() => handleDeleteComment(post.id, comment.id)}
                                                 className="btn btn-danger btn-comment-delete"
                                             >
-                                                [Excluir Comentário]
+                                                Excluir
                                             </button>
                                         )}
                                     </li>
@@ -174,14 +182,6 @@ const Posts = () => {
                             </ul>
                         ) : (
                             <p>Sem comentários</p>
-                        )}
-                        {post.userId === Number(userId) && (
-                            <button
-                                onClick={() => handleDeletePost(post.id)}
-                                className="btn btn-danger btn-post-delete"
-                            >
-                                Deletar Post
-                            </button>
                         )}
                         <form
                             onSubmit={(e) => handleCreateComment(e, post.id)}

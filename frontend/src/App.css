@@ -1,47 +1,124 @@
-/* Container principal */
+/* Variáveis de Estilo */
+:root {
+  --font-primary: 'Roboto', sans-serif;
+  --color-bg: #1e1e1e;
+  --color-bg-light: #282828;
+  --color-primary: #66ccff;
+  --color-text: #ffffff;
+  --color-text-light: #b3b3b3;
+  --color-danger: #ff4d4d;
+  --spacing: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Centraliza a página */
 .posts-container {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
-  background-color: #1e1e1e; /* Fundo escuro para destaque */
-  color: #ffffff; /* Texto claro */
-  border-radius: 8px; /* Bordas arredondadas */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para destaque */
-  text-align: center; /* Centraliza o texto */
+  background-color: var(--color-bg-light);
+  color: var(--color-text);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
 
 /* Cabeçalhos */
 .posts-header {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #66ccff; /* Azul moderno */
+  color: var(--color-primary);
+}
+
+/* Formulário */
+.post-form, .comment-form {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+  border: 1px solid #444444;
+  border-radius: 5px;
+  background-color: #2a2a2a;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px var(--color-primary);
 }
 
 /* Post Card */
 .post-card {
-  background-color: #282828;
+  background-color: var(--color-bg-light);
   border-radius: 10px;
-  padding: 15px;
+  padding: 20px;
   margin-bottom: 20px;
-  text-align: left; /* Alinhamento para posts e comentários */
+  text-align: left;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Título do post */
+/* Título do Post */
 .post-title {
   font-size: 1.5rem;
-  color: #ffffff;
+  color: var(--color-text);
   margin-bottom: 10px;
 }
 
-/* Conteúdo do post */
+/* Conteúdo do Post */
 .post-content {
   font-size: 1rem;
-  color: #b3b3b3;
+  color: var(--color-text-light);
   margin-bottom: 10px;
+}
+
+/* Autor do Post */
+.post-author {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin-bottom: 10px;
+}
+
+/* Botão de Deletar Post */
+.btn-post-delete {
+  margin-top: 10px;
+  display: block; /* Força o botão a ficar em uma nova linha */
+  padding: 10px 20px;
+  background-color: var(--color-danger);
+  border: none;
+  border-radius: 5px;
+  color: var(--color-text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.btn-post-delete:hover {
+  background-color: #e63939;
 }
 
 /* Comentários */
+.comments-header {
+  font-size: 1.2rem;
+  margin: 20px 0 10px;
+  color: var(--color-primary);
+}
+
 .comments-list {
   list-style: none;
   padding: 0;
@@ -53,19 +130,42 @@
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+  position: relative;
 }
 
+/* Conteúdo do Comentário */
 .comment-content {
   font-size: 0.9rem;
-  color: #cccccc;
+  color: var(--color-text-light);
 }
 
+/* Autor do Comentário */
 .comment-author {
   font-size: 0.8rem;
   color: #999999;
+  margin-top: 5px;
 }
 
-/* Botões */
+/* Botão de Deletar Comentário */
+.btn-comment-delete {
+  width: 50%; /* Reduz o tamanho do botão */
+  margin: 10px auto; /* Centraliza o botão */
+  display: block;
+  padding: 5px 0; /* Altura menor */
+  font-size: 0.9rem; /* Texto menor */
+  background-color: var(--color-danger);
+  color: var(--color-text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-comment-delete:hover {
+  background-color: #e63939;
+}
+
+/* Botões Gerais */
 .btn {
   padding: 10px 20px;
   border: none;
@@ -77,50 +177,10 @@
 }
 
 .btn-primary {
-  background-color: #66ccff;
-  color: #ffffff;
+  background-color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .btn-primary:hover {
   background-color: #4aa3d1;
-}
-
-.btn-danger {
-  background-color: #ff4d4d;
-  color: #ffffff;
-}
-
-.btn-danger:hover {
-  background-color: #e63939;
-}
-
-/* Formulários */
-.post-form, .comment-form {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.form-input {
-  width: 100%;
-  max-width: 600px;
-  padding: 10px;
-  border: 1px solid #444444;
-  border-radius: 5px;
-  background-color: #2a2a2a;
-  color: #ffffff;
-  font-size: 1rem;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #66ccff;
-  box-shadow: 0 0 5px #66ccff;
-}
-
-/* Centraliza os textos */
-.text-center {
-  text-align: center;
 }
