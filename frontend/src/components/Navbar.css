@@ -1,78 +1,52 @@
 .navbar {
-    position: fixed; /* Fixa a navbar na tela */
-    top: 0;
-    left: 0;
-    height: 100vh; /* Faz a navbar ocupar toda a altura da página */
-    width: 200px; /* Define uma largura fixa */
-    background-color: #333; /* Cor de fundo */
-    color: white;
+    width: 200px;
+    height: 100vh;
+    background-color: #2c2c2c;
     display: flex;
-    flex-direction: column; /* Exibe os itens em coluna */
-    justify-content: flex-start;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start; /* Para alinhar os itens ao topo */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Fixa a barra de navegação na lateral */
 }
 
-.nav-link {
-    color: white;
+.navbar-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-links li {
+    margin-bottom: 15px;
+}
+
+.navbar-links a {
     text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    width: 100%; /* Faz o link ocupar a largura total */
-    box-sizing: border-box; /* Inclui o padding na largura */
-}
-
-.nav-link:hover {
-    background-color: #555;
-}
-
-.user-info {
-    margin-top: auto; /* Coloca as informações do usuário no final da navbar */
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-icon {
-    font-size: 20px;
-}
-
-.username {
-    font-weight: bold;
-}
-
-.guest {
-    font-style: italic;
     color: #ccc;
+    font-size: 18px;
+    font-weight: bold;
 }
 
-.main-content {
-    margin-left: 220px; /* Deixa espaço para a navbar fixa */
-    padding: 20px;
+.navbar-links a:hover {
+    color: #fff;
 }
 
 .user-info {
-    margin-top: auto; /* Move o username para o final da navbar */
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espaçamento entre o ícone e o username */
-    padding-top: 20px;
+    margin-top: 20px; /* Adiciona espaço entre a lista de links e o username */
+    color: #ccc;
+    font-size: 16px;
+    font-weight: bold;
     border-top: 1px solid #555; /* Linha separadora */
-    color: #ccc; /* Cor do texto */
+    padding-top: 15px; /* Espaço após a linha */
 }
 
-.user-icon {
+.user-info .user-icon {
     font-size: 18px;
+    margin-right: 8px;
 }
 
 .username {
-    font-weight: bold;
-    color: white; /* Cor do username */
-}
-
-.guest {
-    font-style: italic;
-    color: #ccc; /* Cor para "Visitante" */
+    display: block; /* Certifica que o texto do username fica abaixo */
+    color: #fff;
+    margin-top: 10px; /* Espaço acima do username */
 }

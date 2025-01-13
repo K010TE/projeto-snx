@@ -12,9 +12,10 @@ const Login = () => {
         try {
             const response = await axios.post('/api/login', { username, password });
 
-            // Armazena o token e o userId no localStorage
+            // Armazena o token, userId e username no localStorage
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userId', response.data.userId);
+            localStorage.setItem('username', username); // Armazena o username aqui
 
             alert('Login realizado com sucesso!');
             navigate('/posts'); // Navega para a página de posts após login
