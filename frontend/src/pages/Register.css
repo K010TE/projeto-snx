@@ -1,70 +1,71 @@
 .register-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    background-color: #f4f4f4;
+    align-items: center;
+    height: 100vh; /* Altura da tela toda */
 }
 
-.register-form {
-    width: 100%;
-    max-width: 400px;
-    background: #ffffff;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.register-card {
+    background-color: #1e1e1e; /* Fundo do card */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    width: 300px;
     text-align: center;
 }
 
-.register-form h1 {
-    margin-bottom: 20px;
+.register-card h1 {
     font-size: 24px;
-    color: #333;
+    color: white;
+    margin-bottom: 20px;
 }
 
-.register-form input {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
+.register-card form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-card input {
+    background-color: #2e2e2e;
+    color: white;
+    border: 1px solid #444;
     border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.register-form input:focus {
-    border-color: #28a745;
-    outline: none;
-}
-
-.register-form button {
-    width: 100%;
     padding: 10px;
-    font-size: 16px;
-    background-color: #28a745;
-    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.register-card input::placeholder {
+    color: #bbb;
+}
+
+.register-card button {
+    background-color: #007bff;
+    color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-}
-
-.register-form button:hover {
-    background-color: #218838;
-}
-
-.register-form .login-link {
-    margin-top: 10px;
+    padding: 10px;
     font-size: 14px;
-    color: #555;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.register-form .login-link a {
-    color: #28a745;
+.register-card button:hover {
+    background-color: #0056b3;
+}
+
+.register-card .login-redirect {
+    margin-top: 15px;
+    font-size: 14px;
+    color: white;
+}
+
+.register-card .login-redirect a {
+    color: #007bff;
     text-decoration: none;
-    font-weight: bold;
+    transition: color 0.3s ease;
 }
 
-.register-form .login-link a:hover {
-    text-decoration: underline;
+.register-card .login-redirect a:hover {
+    color: #0056b3;
 }
