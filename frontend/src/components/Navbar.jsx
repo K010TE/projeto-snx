@@ -26,9 +26,14 @@ const Navbar = () => {
                 <li>
                     <Link to="/register">Register</Link>
                 </li>
+
+                {/*
                 <li>
                     <Link to="/posts">Posts</Link>
                 </li>
+                */}
+
+
             </ul>
             <div className="user-info">
                 <span className="user-icon">👤</span>
