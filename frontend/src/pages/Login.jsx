@@ -11,14 +11,18 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post('/api/login', { username, password });
+
+            // Armazena o token e o userId no localStorage
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userId', response.data.userId);
+
             alert('Login realizado com sucesso!');
-            navigate('/posts');
+            navigate('/posts'); // Navega para a página de posts após login
         } catch (err) {
             console.error('Erro no login:', err); // Para debug
             alert('Erro ao fazer login. Verifique suas credenciais.');
         }
-    }        
+    };
 
     return (
         <div>

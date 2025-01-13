@@ -51,23 +51,29 @@ app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
+        // Procura o usuário pelo username
         const user = await User.findOne({ where: { username } });
         if (!user) {
             return res.status(401).send('Usuário ou senha inválidos.');
         }
 
+        // Verifica se a senha está correta
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).send('Usuário ou senha inválidos.');
         }
 
+        // Gera o token JWT
         const token = generateToken({ id: user.id, username: user.username });
-        res.status(200).json({ token });
+
+        // Retorna o token e o userId
+        res.status(200).json({ token, userId: user.id });
     } catch (err) {
         console.error('Erro ao fazer login:', err.message);
         res.status(500).send('Erro ao fazer login.');
     }
 });
+
 
 // Rota para buscar todos os posts com comentários
 app.get('/posts', verifyToken, async (req, res) => {
