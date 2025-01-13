@@ -1,10 +1,21 @@
 //import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
-    // Busca o username do localStorage
     const username = localStorage.getItem('username');
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // Remove os dados do localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+        
+        alert('Você foi desconectado!');
+        // Redireciona para a tela de login
+        navigate('/');
+    };
 
     return (
         <nav className="navbar">
@@ -19,12 +30,16 @@ const Navbar = () => {
                     <Link to="/posts">Posts</Link>
                 </li>
             </ul>
-            {/* Exibe o username como "Usuário: username" */}
             <div className="user-info">
                 <span className="user-icon">👤</span>
                 <span className="username">
-                    User: {username || 'Visitante'}
+                    Usuário: {username || 'Visitante'}
                 </span>
+                {username && (
+                    <button className="logout-button" onClick={handleLogout}>
+                        Sair
+                    </button>
+                )}
             </div>
         </nav>
     );
