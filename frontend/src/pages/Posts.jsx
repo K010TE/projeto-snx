@@ -215,30 +215,42 @@ const Posts = () => {
                             </div>
                         )}
                         {editPostId === post.id && (
-                            <form
-                                onSubmit={(e) => handleEditPost(e, post.id)}
-                                className="edit-post-form"
-                            >
-                                <input
-                                    className="form-input"
-                                    type="text"
-                                    placeholder="Novo título"
-                                    value={editTitle}
-                                    onChange={(e) => setEditTitle(e.target.value)}
-                                    required
-                                />
-                                <textarea
-                                    className="form-input"
-                                    placeholder="Novo conteúdo"
-                                    value={editContent}
-                                    onChange={(e) => setEditContent(e.target.value)}
-                                    required
-                                ></textarea>
-                                <button className="btn btn-primary" type="submit">
-                                    Salvar
-                                </button>
-                            </form>
-                        )}
+    <form
+        onSubmit={(e) => handleEditPost(e, post.id)}
+        className="edit-post-form"
+    >
+        <input
+            type="text"
+            placeholder="Novo título"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            required
+        />
+        <textarea
+            placeholder="Novo conteúdo"
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            required
+        ></textarea>
+        <div className="edit-actions">
+            <button type="submit" className="btn btn-primary">
+                Salvar
+            </button>
+            <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                    setEditPostId(null); // Fecha o modo de edição
+                    setEditTitle(''); // Limpa os estados
+                    setEditContent('');
+                }}
+            >
+                Cancelar
+            </button>
+        </div>
+    </form>
+)}
+
                         <h3 className="comments-header">Comentários:</h3>
                         {post.comments && post.comments.length > 0 ? (
                             <ul className="comments-list">

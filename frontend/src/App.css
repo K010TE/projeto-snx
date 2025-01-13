@@ -188,3 +188,58 @@ body {
 .btn-primary:hover {
   background-color: #4aa3d1;
 }
+
+.edit-post-form {
+  display: flex;
+  flex-direction: column; /* Coloca os elementos em uma coluna */
+  gap: 10px; /* Espaçamento entre os campos */
+  margin-top: 15px; /* Espaçamento superior */
+}
+
+.edit-post-form input,
+.edit-post-form textarea {
+  width: 100%; /* Faz os campos ocuparem toda a largura do formulário */
+  padding: 8px; /* Adiciona espaço interno */
+  border: 1px solid #ccc; /* Bordas suaves */
+  border-radius: 4px; /* Bordas arredondadas */
+  font-size: 16px; /* Tamanho da fonte */
+}
+
+.edit-post-form textarea {
+  resize: vertical; /* Permite redimensionar apenas na vertical */
+  min-height: 100px; /* Define uma altura mínima */
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-start; /* Alinha os botões à esquerda */
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Cor mais escura ao passar o mouse */
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-secondary:hover {
+  background-color: #565e64; /* Cor mais escura ao passar o mouse */
+}
