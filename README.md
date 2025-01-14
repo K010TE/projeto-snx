@@ -148,11 +148,11 @@ O backend utiliza autenticação JWT para proteger as rotas. Para acessar a apli
 
 ### Página de Login
 
-![Login](https://drive.google.com/file/d/1Bp38tBF4bd8xzrPWLLYuiWk6eYJcdClF/view?usp=drive_link)
+![Login] https://drive.google.com/file/d/1Bp38tBF4bd8xzrPWLLYuiWk6eYJcdClF/view?usp=drive_link
 
 ### Página de Posts
 
-![Posts](https://drive.google.com/file/d/1Lkrm5z2vJVMpCbDfHDNOlM9aIE2h-JUQ/view?usp=drive_link)
+![Posts] https://drive.google.com/file/d/1Lkrm5z2vJVMpCbDfHDNOlM9aIE2h-JUQ/view?usp=drive_link
 
 ---
 
