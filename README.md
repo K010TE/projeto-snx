@@ -156,6 +156,175 @@ O backend utiliza autenticação JWT para proteger as rotas. Para acessar a apli
 
 ---
 
+## 🔍 Endpoints da API
+
+### **Usuários**
+
+#### Registro de Usuário
+
+**POST** `/api/register`
+
+- **Body:**
+  ```json
+  {
+    "username": "string",
+    "password": "string",
+    "name": "string"
+  }
+  ```
+- **Resposta:**
+  ```json
+  {
+    "message": "Usuário registrado com sucesso."
+  }
+  ```
+
+#### Login
+
+**POST** `/api/login`
+
+- **Body:**
+  ```json
+  {
+    "username": "string",
+    "password": "string"
+  }
+  ```
+- **Resposta:**
+  ```json
+  {
+    "token": "string",
+    "userId": "number"
+  }
+  ```
+
+### **Posts**
+
+#### Listar Posts
+
+**GET** `/api/posts`
+
+- **Headers:**
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+- **Resposta:**
+  ```json
+  [
+    {
+      "id": "number",
+      "title": "string",
+      "content": "string",
+      "userId": "number",
+      "comments": [
+        {
+          "id": "number",
+          "content": "string",
+          "userId": "number"
+        }
+      ]
+    }
+  ]
+  ```
+
+#### Criar Post
+
+**POST** `/api/posts`
+
+- **Headers:**
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+- **Body:**
+  ```json
+  {
+    "title": "string",
+    "content": "string"
+  }
+  ```
+
+#### Editar Post
+
+**PUT** `/api/posts/:postId`
+
+- **Headers:**
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+- **Body:**
+  ```json
+  {
+    "title": "string",
+    "content": "string"
+  }
+  ```
+
+#### Deletar Post
+
+**DELETE** `/api/posts/:postId`
+
+- **Headers:**
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+
+### **Comentários**
+
+#### Criar Comentário
+
+**POST** `/api/posts/:postId/comments`
+
+- **Headers:**
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+- **Body:**
+  ```json
+  {
+    "content": "string"
+  }
+  ```
+
+#### Editar Comentário
+
+**PUT** `/api/posts/:postId/comments/:commentId`
+
+- **Headers:**
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+- **Body:**
+  ```json
+  {
+    "content": "string"
+  }
+  ```
+
+#### Deletar Comentário
+
+**DELETE** `/api/posts/:postId/comments/:commentId`
+
+- **Headers:**
+  ```json
+  {
+    "Authorization": "Bearer <token>"
+  }
+  ```
+
+---
+
 ## Notas Importantes
 
 - O arquivo `.env` já contém as credenciais públicas para acesso ao banco configurado para este projeto.
