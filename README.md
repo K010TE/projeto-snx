@@ -1,6 +1,6 @@
-# 📋 Plataforma de Posts e Comentários
+# 📋 Desafio Técnico Smart NX
 
-Este é um projeto desenvolvido como parte de um desafio técnico para a vaga de **Full Stack Developer Jr**. A aplicação consiste em uma plataforma que permite aos usuários autenticados criar, editar, excluir e visualizar posts e comentários.
+Este é um projeto desenvolvido como parte de um desafio técnico para a vaga de **Full Stack Developer**. A aplicação consiste em uma plataforma que permite aos usuários autenticados criar, editar, excluir e visualizar posts e comentários.
 
 ## 🚀 Funcionalidades
 
