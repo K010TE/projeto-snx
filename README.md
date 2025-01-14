@@ -164,7 +164,6 @@ O backend utiliza autenticação JWT para proteger as rotas. Para acessar a apli
 ## Contato
 
 - **Nome:** Itagiba Neto
-- **E-mail:** itagiba.net@gmail.com
 - **LinkedIn:** linkedin.com/in/itagiba-neto
 
 ---
