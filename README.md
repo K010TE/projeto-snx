@@ -1,114 +1,166 @@
-# API SNX
+# 📋 Plataforma de Posts e Comentários
 
-Este projeto foi desenvolvido como parte do desafio técnico para a vaga de Full Stack Developer Jr na Smart NX. Ele consiste em uma API para gerenciamento de posts, utilizando Node.js, Express, PostgreSQL e Sequelize.
+Este é um projeto desenvolvido como parte de um desafio técnico para a vaga de **Full Stack Developer Jr**. A aplicação consiste em uma plataforma que permite aos usuários autenticados criar, editar, excluir e visualizar posts e comentários.
 
-## Executando o Projeto
+## 🚀 Funcionalidades
 
-Siga estas etapas para configurar e rodar o projeto na sua máquina local:
+- Registro de novos usuários.
+- Login com autenticação JWT.
+- Criação, edição e exclusão de posts.
+- Adição, edição e exclusão de comentários.
+- Navbar Lateral com nome específico do usuário logado.
+- Feedback visual para ações como exclusão de posts ou comentários.
+- Design responsivo, minimalista e moderno, com foco em usabilidade.
 
-1. **Clone o repositório:**
+## 🛠️ Tecnologias Utilizadas
 
-   ```bash
-   git clone https://github.com/K010TE/projeto-snx.git
-   cd projeto-snx
-   ```
+### Backend
 
-2. **O arquivo `.env` já está configurado no repositório:**
+- **Node.js**: Plataforma para execução do JavaScript no lado do servidor.
+- **Express.js**: Framework para construção das APIs REST.
+- **Sequelize**: ORM utilizado para interagir com o banco de dados.
+- **PostgreSQL (Tembo.io)**: Banco de dados relacional, armazenado em nuvem.
+- **JWT (JSON Web Token)**: Para autenticação segura.
+- **dotenv**: Gerenciamento de variáveis de ambiente.
 
-   As credenciais já estão prontas para uso com um banco público configurado para este projeto. Como não há dados sensíveis e o projeto é apenas para fins de avaliação tecnica, escolhi essa abordagem por ser mais fácil de ser testada e avaliada.
+### Frontend
 
-3. **Instale as dependências:**
+- **React.js**: Biblioteca para construção de interfaces de usuário.
+- **React Router**: Gerenciamento de rotas.
+- **Axios**: Para realizar requisições HTTP ao backend.
+- **CSS customizado**: Estilização da aplicação.
+
+### Ambiente de Desenvolvimento
+
+- **Git**: Controle de versão.
+- **Visual Studio Code**: Editor de código.
+- **Tembo.io**: Banco de dados na nuvem.
+- **Concurrently**: Para rodar frontend e backend simultaneamente.
+
+---
+
+## ⚙️ Como Executar o Projeto
+
+### Pré-requisitos
+
+Certifique-se de ter instalado:
+
+- **Node.js**: [Download Node.js](https://nodejs.org/)
+- **NPM** ou **Yarn**: Gerenciador de pacotes do Node.js.
+- **Git**: Para clonar o repositório.
+
+### Clonando o Repositório
+
+```bash
+git clone https://github.com/K010TE/projeto-snx.git
+cd projeto-snx
+```
+
+### Configurando o Backend e o Frontend Simultaneamente
+
+1. **Instale as dependências:**
 
    ```bash
    npm install
    ```
 
-4. **Inicie o servidor:**
+2. **Inicialize o backend e o frontend:**
 
    ```bash
    npm start
    ```
 
-   O servidor será iniciado em `http://localhost:3333`.
+   - O backend será iniciado em `http://localhost:3333`.
+   - O frontend será iniciado em `http://localhost:5173`.
 
-## Endpoints da API
+### Executando os Servidores Separadamente (Opcional)
 
-### Criar Post
+**Backend:**
 
-- **Método:** POST
-- **URL:** `/posts`
-- **Body:**
-  ```json
-  {
-    "title": "Título do Post",
-    "content": "Conteúdo do Post"
-  }
-  ```
-- **Resposta:**
-  ```json
-  {
-    "id": 1,
-    "title": "Título do Post",
-    "content": "Conteúdo do Post",
-    "created_at": "2025-01-12T12:00:00.000Z",
-    "updated_at": "2025-01-12T12:00:00.000Z"
-  }
-  ```
+```bash
+cd backend
+npm install
+npm start
+```
 
-### Listar Posts
+**Frontend:**
 
-- **Método:** GET
-- **URL:** `/posts`
-- **Resposta:**
-  ```json
-  [
-    {
-      "id": 1,
-      "title": "Título do Post",
-      "content": "Conteúdo do Post",
-      "created_at": "2025-01-12T12:00:00.000Z",
-      "updated_at": "2025-01-12T12:00:00.000Z"
-    }
-  ]
-  ```
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-### Atualizar Post
+---
 
-- **Método:** PUT
-- **URL:** `/posts/:id`
-- **Body:**
-  ```json
-  {
-    "title": "Novo Título",
-    "content": "Novo Conteúdo"
-  }
-  ```
-- **Resposta:**
-  ```json
-  {
-    "id": 1,
-    "title": "Novo Título",
-    "content": "Novo Conteúdo",
-    "created_at": "2025-01-12T12:00:00.000Z",
-    "updated_at": "2025-01-12T12:30:00.000Z"
-  }
-  ```
+## 📄 Estrutura de Diretórios
 
-### Deletar Post
+```
+📦 projeto-snx
+├── backend
+│   ├── src
+│   │   ├── models
+│   │   │   ├── Comment.js
+│   │   │   ├── Post.js
+│   │   │   ├── User.js
+│   │   ├── auth.js
+│   │   ├── database.js
+│   │   └── index.js
+│   ├── .env
+│   ├── package.json
+│   ├── package-lock.json
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Navbar.css
+│   │   ├── pages
+│   │   │   ├── Login.jsx
+│   │   │   ├── Login.css
+│   │   │   ├── Register.jsx
+│   │   │   └── Register.css
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── public
+│   ├── vite.config.js
+│   ├── .gitignore
+│   ├── package.json
+│   └── package-lock.json
+```
 
-- **Método:** DELETE
-- **URL:** `/posts/:id`
-- **Resposta:**
-  ```json
-  {
-    "message": "Post deletado com sucesso"
-  }
-  ```
+---
+
+## 🔑 Informações de Autenticação e Banco de Dados
+
+O backend utiliza autenticação JWT para proteger as rotas. Para acessar a aplicação:
+
+- Registre-se na tela de **Registro**.
+- Faça login na tela de **Login**.
+- O banco de dados está configurado no Tembo.io, rodando 24h, para facilitar o processo de avaliação.
+
+> **Nota:** Nenhum dado sensível foi exposto, e o banco é utilizado exclusivamente para este teste técnico.
+
+---
+
+## 📷 Screenshots
+
+### Página de Login
+
+![Login](https://drive.google.com/file/d/1Bp38tBF4bd8xzrPWLLYuiWk6eYJcdClF/view?usp=drive_link)
+
+### Página de Posts
+
+![Posts](https://drive.google.com/file/d/1Lkrm5z2vJVMpCbDfHDNOlM9aIE2h-JUQ/view?usp=drive_link)
+(image-1.png)
+
+---
 
 ## Notas Importantes
 
 - O arquivo `.env` já contém as credenciais públicas para acesso ao banco configurado para este projeto.
-- Este projeto foi desenvolvido para fins de avaliação técnica.
+- Este projeto foi desenvolvido exclusivamente para fins de avaliação técnica e não faz use de nenhum dado sensível.
 
 ## Contato
 
