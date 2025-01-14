@@ -36,6 +36,7 @@ Este é um projeto desenvolvido como parte de um desafio técnico para a vaga de
 - **Visual Studio Code**: Editor de código.
 - **Tembo.io**: Banco de dados na nuvem.
 - **Concurrently**: Para rodar frontend e backend simultaneamente.
+- **Postman**: Para realizações de testes de requisições http.
 
 ---
 
